@@ -12,3 +12,12 @@ This will automatically build the project and start it with live-server at [http
 
 ### `npm run build`
 This will build the project for production in the `dist` folder.
+
+## Contributors
+
+- [Joshua Jones](https://github.com/joshua-a-jones)
+- [Alan Jones](https://github.com/aljones1816)
+
+## License
+
+This project is licensed under the GNU General Public License v3.0
