@@ -1,5 +1,5 @@
-import { boardContainer } from './board';
-import { controlsContainer } from './controls';
+import { boardContainer } from './components/board';
+import { controlsContainer } from './components/controls';
 
 const app = document.getElementById('app')!;
 
