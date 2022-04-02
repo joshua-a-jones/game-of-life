@@ -1,4 +1,7 @@
-const myDiv = document.createElement('div');
-myDiv.innerText = 'Hello, World!';
+import { boardContainer } from './board';
+import { controlsContainer } from './controls';
 
-document.body.appendChild(myDiv);
+const app = document.getElementById('app')!;
+
+app.appendChild(boardContainer);
+app.appendChild(controlsContainer);
