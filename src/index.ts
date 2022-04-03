@@ -4,7 +4,6 @@ import { ControlsContainer } from './components/controls';
 let isRunning = false;
 
 renderApp();
-//test
 
 function handleButtonClick() {
     isRunning = !isRunning;
