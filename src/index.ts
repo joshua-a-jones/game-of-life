@@ -1,7 +1,29 @@
 import { boardContainer } from './components/board';
-import { controlsContainer } from './components/controls';
+import { ControlsContainer } from './components/controls';
 
-const app = document.getElementById('app')!;
+let isRunning = false;
 
-app.appendChild(boardContainer);
-app.appendChild(controlsContainer);
+renderApp();
+//test
+
+function handleButtonClick() {
+    isRunning = !isRunning;
+    renderApp();
+}
+
+function renderApp() {
+    const app = document.getElementById('app')!;
+    while (app.firstChild) {
+        app.removeChild(app.firstChild);
+    }
+
+    app.appendChild(
+        ControlsContainer({
+            handleRunClick: handleButtonClick,
+            handleRandomizeClick: handleButtonClick,
+            handleStopClick: handleButtonClick,
+            isRunning,
+        })
+    );
+    app.appendChild(boardContainer);
+}
