@@ -1,3 +1,6 @@
+import Grid from './Grid';
+import Cell from './Cell';
+
 class Board {
     private _dimensions: number;
     private _grid: Grid<Cell>;
