@@ -12,6 +12,8 @@ class Grid<T> {
         for (let i = 0; i < columns; i++) {
             grid[i] = new Array<T>(rows);
         }
+
+        this._grid = grid;
     }
 
     getElementAt(x: number, y: number): T | null {
