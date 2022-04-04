@@ -1,4 +1,4 @@
-class Grid<T> {
+export default class Grid<T> {
     private _columns: number;
     private _rows: number;
     private _grid: Array<Array<T>>;
@@ -16,7 +16,7 @@ class Grid<T> {
         this._grid = grid;
     }
 
-    getElementAt(x: number, y: number): T | null {
+    public getElementAt(x: number, y: number): T | null {
         return x > 0 && x < this._columns && y > 0 && y < this._rows
             ? this._grid[x][y]
             : null;
