@@ -1,5 +1,5 @@
-import { boardContainer } from './components/board';
-import { ControlsContainer } from './components/controls';
+import { boardContainer } from './UI/components/board';
+import { ControlsContainer } from './UI/components/controls';
 
 let isRunning = false;
 
