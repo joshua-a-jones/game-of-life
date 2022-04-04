@@ -22,7 +22,7 @@ module.exports = {
       },
     ],
   },
-  plugins: [new ESLintPlugin({exclude: 'node_modules', extensions: ['.ts', '.tsx'], emitError: true})],
+  plugins: [new ESLintPlugin({exclude: ['node_modules', 'dist'], extensions: ['.ts'], emitError: true})],
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
   },
