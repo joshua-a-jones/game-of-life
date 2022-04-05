@@ -12,18 +12,22 @@ function handleButtonClick() {
 }
 
 function renderApp() {
-    const app = document.getElementById('app')!;
-    while (app.firstChild) {
-        app.removeChild(app.firstChild);
-    }
+    const app = document.getElementById('app');
+    if (app !== null) {
+        while (app.firstChild) {
+            app.removeChild(app.firstChild);
+        }
 
-    app.appendChild(
-        ControlsContainer({
-            handleRunClick: handleButtonClick,
-            handleRandomizeClick: handleButtonClick,
-            handleStopClick: handleButtonClick,
-            isRunning,
-        })
-    );
-    app.appendChild(boardContainer);
+        app.appendChild(
+            ControlsContainer({
+                handleRunClick: handleButtonClick,
+                handleRandomizeClick: handleButtonClick,
+                handleStopClick: handleButtonClick,
+                isRunning,
+            })
+        );
+        app.appendChild(boardContainer);
+    } else {
+        throw new Error('App element could not be found in index.html');
+    }
 }
