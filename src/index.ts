@@ -1,6 +1,7 @@
-import { boardContainer } from './UI/components/board';
+import { boardContainer, renderCanvas } from './UI/components/board';
 import { ControlsContainer } from './UI/components/controls';
 import './globalStyles.css';
+import Board from './Game/Board';
 let isRunning = false;
 
 renderApp();
@@ -13,6 +14,8 @@ function handleButtonClick() {
 
 function renderApp() {
     const app = document.getElementById('app');
+    const board = new Board(20);
+
     if (app !== null) {
         while (app.firstChild) {
             app.removeChild(app.firstChild);
@@ -26,7 +29,7 @@ function renderApp() {
                 isRunning,
             })
         );
-        app.appendChild(boardContainer);
+        app.appendChild(boardContainer.appendChild(renderCanvas(board)));
     } else {
         throw new Error('App element could not be found in index.html');
     }

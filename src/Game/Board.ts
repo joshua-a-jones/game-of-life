@@ -2,8 +2,8 @@ import Grid from './Grid';
 import Cell from './Cell';
 
 export default class Board {
-    private _dimensions: number;
-    private _grid: Grid<Cell>;
+    public _dimensions: number;
+    public _grid: Grid<Cell>;
 
     // constructor for square board
     public constructor(dimensions: number) {
