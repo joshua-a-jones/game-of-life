@@ -1,6 +1,6 @@
 import { boardContainer } from './UI/components/board';
 import { ControlsContainer } from './UI/components/controls';
-
+import './globalStyles.css';
 let isRunning = false;
 
 renderApp();
