@@ -38,4 +38,13 @@ export default class Board {
 
         return numberOfLivingNeighbors;
     }
+
+    randomizeBoardState() {
+        for (let i = 0; i < this._dimensions; i++) {
+            for (let j = 0; j < this._dimensions; j++) {
+                const rand = Math.floor(Math.random() * 2);
+                this._grid.setElementAt(i, j, new Cell(rand > 0));
+            }
+        }
+    }
 }

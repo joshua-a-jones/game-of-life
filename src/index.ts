@@ -4,17 +4,21 @@ import './globalStyles.css';
 import Board from './Game/Board';
 let isRunning = false;
 
-renderApp();
 //test
+const board = new Board(20);
 
-function handleButtonClick() {
+function handleButtonClickRun() {
     isRunning = !isRunning;
     renderApp();
 }
 
-function renderApp() {
+function handleButtonClickRandomize() {
+    board.randomizeBoardState();
+    renderApp();
+}
+
+const renderApp = () => {
     const app = document.getElementById('app');
-    const board = new Board(20);
 
     if (app !== null) {
         while (app.firstChild) {
@@ -23,9 +27,9 @@ function renderApp() {
 
         app.appendChild(
             ControlsContainer({
-                handleRunClick: handleButtonClick,
-                handleRandomizeClick: handleButtonClick,
-                handleStopClick: handleButtonClick,
+                handleRunClick: handleButtonClickRun,
+                handleRandomizeClick: handleButtonClickRandomize,
+                handleStopClick: handleButtonClickRun,
                 isRunning,
             })
         );
@@ -33,4 +37,6 @@ function renderApp() {
     } else {
         throw new Error('App element could not be found in index.html');
     }
-}
+};
+
+renderApp();
