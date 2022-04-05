@@ -7,13 +7,19 @@ export default class Grid<T> {
         this._columns = columns;
         this._rows = rows;
 
-        let grid = new Array(columns);
+        const grid = new Array<Array<T>>(columns);
 
         for (let i = 0; i < columns; i++) {
             grid[i] = new Array<T>(rows);
         }
 
         this._grid = grid;
+    }
+
+    public setElementAt(x: number, y: number, obj: T) {
+        if (x < this._columns && y < this._rows) {
+            this._grid[x][y] = obj;
+        }
     }
 
     public getElementAt(x: number, y: number): T | null {
