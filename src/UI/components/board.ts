@@ -1,32 +1,56 @@
 import style from './board.module.css';
-import Board from 'src/Game/Board';
 
-const boardContainer = document.createElement('div');
+const boardContainer: HTMLDivElement = document.createElement('div');
+const canvas: HTMLCanvasElement = document.createElement('canvas');
 
-// function that accepts a Board object and renders the grid to the canvas
-function renderCanvas(board: Board) {
-    const canvas = document.createElement('canvas');
-    // canvas width is going to become dynamic based on window size, but setting it to a fixed value for now
-    canvas.width = 1000;
-    canvas.height = 1000;
+const numvar: number = 1;
+
+boardContainer.classList.add(style.container);
+
+const drawGrid = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, tileSize: number, highlightNum: number) => {
+    for (let y = 0; y < canvas.width / tileSize; y++) {
+      for (let x = 0; x < canvas.height / tileSize; x++) {
+        const parity = (x + y) % 2;
+        const tileNum = x + canvas.width / tileSize * y;
+        const xx = x * tileSize;
+        const yy = y * tileSize;
+  
+        if (tileNum === highlightNum) {
+          ctx.fillStyle = "#f0f";
+        }
+        else {
+          ctx.fillStyle = parity ? "#555" : "#ddd";
+        }
+        
+        ctx.fillRect(xx, yy, tileSize, tileSize);
+        ctx.fillStyle = parity ? "#fff" : "#000";
+        ctx.fillText(tileNum.toString(), xx, yy);
+      }
+    }
+  };
+
+if (canvas.getContext) {
+   
     const ctx = canvas.getContext('2d');
-    canvas.classList.add(style.canvas);
+    if (!ctx || !(ctx instanceof CanvasRenderingContext2D)) {
+        throw new Error('Failed to get 2D context');
+    }
+    
+    for (let i = 0; i < 100; i++) {
+        for (let j = 0; j < 100; j++) {
+            // create a 10x10 grid of squares
+            ctx.strokeRect(i * 10, j * 10, 10, 10);
+            
 
-    // currently setting each cell to 50 pixels wide and tall but we can adjust later
-    if (ctx) {
-        for (let i = 0; i < board._dimensions; i++) {
-            for (let j = 0; j < board._dimensions; j++) {
-                if (board._grid.getElementAt(i, j)?.getStatus) {
-                    ctx.fillStyle = '#f000f0';
-                    ctx.fillRect(i * 50, j * 50, 50, 50);
-                } else {
-                    ctx.strokeRect(i * 50, j * 50, 50, 50);
-                }
-            }
         }
     }
+    
+    
+  } else {
+    // canvas-unsupported code here
+    console.log('canvas not supported');
+  }
 
-    return canvas;
-}
+  boardContainer.appendChild(canvas);
 
-export { boardContainer, renderCanvas };
+export { boardContainer };
