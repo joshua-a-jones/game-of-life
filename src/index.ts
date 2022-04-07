@@ -5,7 +5,7 @@ import Board from './Game/Board';
 let isRunning = false;
 
 //test
-const board = new Board(20);
+const board = new Board(20, 20);
 
 function handleButtonClickRun() {
     isRunning = !isRunning;

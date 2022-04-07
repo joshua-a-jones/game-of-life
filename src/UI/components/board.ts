@@ -11,21 +11,25 @@ function renderCanvas(board: Board) {
     canvas.height = 1000;
     const ctx = canvas.getContext('2d');
     canvas.classList.add(style.canvas);
+    const cellSize = 50;
 
     // currently setting each cell to 50 pixels wide and tall but we can adjust later
     if (ctx) {
-        for (let i = 0; i < board._dimensions; i++) {
-            for (let j = 0; j < board._dimensions; j++) {
-                if (board._grid.getElementAt(i, j)?.getStatus) {
-                    ctx.fillStyle = '#f000f0';
-                    ctx.fillRect(i * 50, j * 50, 50, 50);
-                } else {
-                    ctx.strokeRect(i * 50, j * 50, 50, 50);
-                }
+        for (let i = 0; i < canvas.width / cellSize; i++) {
+            for (let j = 0; j < canvas.height / cellSize; j++) {
+                ctx.strokeRect(i * cellSize, j * cellSize, cellSize, cellSize);
             }
         }
+        board.getBoardState().forEach((cell) => {
+            ctx.fillStyle = '#f000f0';
+            ctx.fillRect(
+                cell.getCoordinates().x * cellSize,
+                cell.getCoordinates().y * cellSize,
+                cellSize,
+                cellSize
+            );
+        });
     }
-
     return canvas;
 }
 

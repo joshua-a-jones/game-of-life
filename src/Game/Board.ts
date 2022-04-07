@@ -1,49 +1,44 @@
-import Grid from './Grid';
 import Cell from './Cell';
 
 export default class Board {
-    public _dimensions: number;
-    public _grid: Grid<Cell>;
+    private _livingCells: Array<Cell>;
+    private _xDim: number;
+    private _yDim: number;
 
     // constructor for square board
-    public constructor(dimensions: number) {
-        this._dimensions = dimensions;
-
-        this._grid = new Grid<Cell>(dimensions, dimensions);
+    public constructor(xInitial: number, yInitial: number) {
+        this._livingCells = new Array<Cell>();
+        this._xDim = xInitial;
+        this._yDim = yInitial;
 
         // randomizes the starting status of each cell.
-        for (let i = 0; i < this._dimensions; i++) {
-            for (let j = 0; j < this._dimensions; j++) {
+        for (let i = 0; i < xInitial; i++) {
+            for (let j = 0; j < yInitial; j++) {
                 const rand = Math.floor(Math.random() * 2);
-                this._grid.setElementAt(i, j, new Cell(rand > 0));
-            }
-        }
-    }
-
-    countLivingNeighborsAt(x: number, y: number) {
-        let numberOfLivingNeighbors = 0;
-
-        if (x < 0 || x > this._dimensions || y < 0 || y < this._dimensions) {
-            // this is an edge piece, what we wanna do?
-        } else {
-            for (let i = x - 1; i < this._dimensions; i++) {
-                for (let j = y - 1; j < this._dimensions; j++) {
-                    numberOfLivingNeighbors += this._grid.getElementAt(i, j)
-                        ?.getStatus
-                        ? 1
-                        : 0;
+                if (rand > 0) {
+                    const newCell = new Cell(i, j);
+                    this._livingCells.push(newCell);
                 }
             }
         }
-
-        return numberOfLivingNeighbors;
     }
 
+    getBoardState() {
+        return this._livingCells;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    countLivingNeighborsAt(x: number, y: number) {}
+
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     randomizeBoardState() {
-        for (let i = 0; i < this._dimensions; i++) {
-            for (let j = 0; j < this._dimensions; j++) {
+        this._livingCells = new Array<Cell>();
+        for (let i = 0; i < this._xDim; i++) {
+            for (let j = 0; j < this._yDim; j++) {
                 const rand = Math.floor(Math.random() * 2);
-                this._grid.setElementAt(i, j, new Cell(rand > 0));
+                if (rand > 0) {
+                    this._livingCells.push(new Cell(i, j));
+                }
             }
         }
     }
