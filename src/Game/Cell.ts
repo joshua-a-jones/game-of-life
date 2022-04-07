@@ -1,16 +1,14 @@
 export default class Cell {
-    private _isAlive: boolean;
+    private _x: number;
+    private _y: number;
 
     // constructor. Default state of cell is dead.
-    public constructor(isAlive = false) {
-        this._isAlive = isAlive;
+    public constructor(x: number, y: number) {
+        this._x = x;
+        this._y = y;
     }
 
-    public get getStatus() {
-        return this._isAlive;
-    }
-
-    public set updateStatus(isAlive: boolean) {
-        this._isAlive = isAlive;
+    public getCoordinates() {
+        return { x: this._x, y: this._y };
     }
 }
