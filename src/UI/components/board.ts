@@ -17,16 +17,16 @@ function renderCanvas(board: Board) {
     if (ctx) {
         for (let i = 0; i < canvas.width / cellSize; i++) {
             for (let j = 0; j < canvas.height / cellSize; j++) {
-                ctx.strokeRect(i * 50, j * 50, 50, 50);
+                ctx.strokeRect(i * cellSize, j * cellSize, cellSize, cellSize);
             }
         }
         board.getBoardState().forEach((cell) => {
             ctx.fillStyle = '#f000f0';
             ctx.fillRect(
-                cell.getCoordinates().x * 50,
-                cell.getCoordinates().y * 50,
-                50,
-                50
+                cell.getCoordinates().x * cellSize,
+                cell.getCoordinates().y * cellSize,
+                cellSize,
+                cellSize
             );
         });
     }
