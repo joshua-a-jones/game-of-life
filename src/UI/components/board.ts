@@ -23,8 +23,8 @@ function renderCanvas(board: Board) {
         board.getBoardState().forEach((cell) => {
             ctx.fillStyle = '#f000f0';
             ctx.fillRect(
-                cell.getCoordinates().x * cellSize,
-                cell.getCoordinates().y * cellSize,
+                cell.coordinates.x * cellSize,
+                cell.coordinates.y * cellSize,
                 cellSize,
                 cellSize
             );
