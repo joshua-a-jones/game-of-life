@@ -27,7 +27,6 @@ export default class Board {
         return this._livingCells;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     countLivingNeighborsAt(x: number, y: number) {
         let livingNeigbors = 0;
         this._livingCells.forEach((cell) => {
@@ -47,7 +46,6 @@ export default class Board {
         return livingNeigbors;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     randomizeBoardState() {
         this._livingCells = new Array<Cell>();
         for (let i = 0; i < this._xDim; i++) {
