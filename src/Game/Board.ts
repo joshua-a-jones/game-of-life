@@ -22,9 +22,11 @@ export default class Board {
         //     }
         // }
 
-        this._livingCells.push(new Cell(1, 1));
         this._livingCells.push(new Cell(1, 2));
-        this._livingCells.push(new Cell(1, 3));
+        this._livingCells.push(new Cell(2, 2));
+        this._livingCells.push(new Cell(3, 2));
+        this._livingCells.push(new Cell(3, 1));
+        this._livingCells.push(new Cell(2, 0));
     }
 
     getBoardState() {
