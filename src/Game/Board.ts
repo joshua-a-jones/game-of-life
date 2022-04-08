@@ -27,10 +27,25 @@ export default class Board {
         return this._livingCells;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    countLivingNeighborsAt(x: number, y: number) {}
+    countLivingNeighborsAt(x: number, y: number) {
+        let livingNeigbors = 0;
+        this._livingCells.forEach((cell) => {
+            // don't include the cell itself
+            if (cell.coordinates.x === x && cell.coordinates.y === y) return;
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
+            // possible neighbors are between x -1 and x + 1 and y - 1 and y + 1 inclusive
+            if (
+                cell.coordinates.y <= y + 1 &&
+                cell.coordinates.y >= y - 1 &&
+                cell.coordinates.x <= x + 1 &&
+                cell.coordinates.x >= x - 1
+            ) {
+                livingNeigbors++;
+            }
+        });
+        return livingNeigbors;
+    }
+
     randomizeBoardState() {
         this._livingCells = new Array<Cell>();
         for (let i = 0; i < this._xDim; i++) {
