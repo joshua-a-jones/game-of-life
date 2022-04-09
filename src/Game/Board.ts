@@ -1,15 +1,21 @@
 import Cell from './Cell';
 
 export default class Board {
-    private _livingCells: Array<Cell>;
     private _xDim: number;
     private _yDim: number;
+    private _cellMap: Map<string, Cell>;
+
+    // _cells: Map();
+
+    // the key of each cell is its coordinates (allows constant lookup time for any cell)
+    // the value of each cell is 1 or 0 (alive or dead)
+    // this will greatly speed up counting the living neighbors because we don't have to loop anymore
 
     // constructor for square board
     public constructor(xInitial: number, yInitial: number) {
-        this._livingCells = new Array<Cell>();
         this._xDim = xInitial;
         this._yDim = yInitial;
+        this._cellMap = new Map<string, Cell>();
 
         // randomizes the starting status of each cell.
         // for (let i = 0; i < xInitial; i++) {
@@ -22,24 +28,26 @@ export default class Board {
         //     }
         // }
 
-        this._livingCells.push(new Cell(1, 2));
-        this._livingCells.push(new Cell(2, 2));
-        this._livingCells.push(new Cell(3, 2));
-        this._livingCells.push(new Cell(3, 1));
-        this._livingCells.push(new Cell(2, 0));
+        this._cellMap.set('1,2', new Cell(1, 2));
+        this._cellMap.set('2,2', new Cell(2, 2));
+        this._cellMap.set('3,2', new Cell(3, 2));
+        this._cellMap.set('3,1', new Cell(3, 1));
+        this._cellMap.set('2,0', new Cell(2, 0));
     }
 
     getBoardState() {
-        return this._livingCells;
+        //return this._livingCells;
+        // return an array of the values of cellMap
+        return Array.from(this._cellMap.values());
     }
 
     randomizeBoardState() {
-        this._livingCells = new Array<Cell>();
+        this._cellMap = new Map<string, Cell>();
         for (let i = 0; i < this._xDim; i++) {
             for (let j = 0; j < this._yDim; j++) {
                 const rand = Math.floor(Math.random() * 2);
                 if (rand > 0) {
-                    this._livingCells.push(new Cell(i, j));
+                    this._cellMap.set(`${i},${j}`, new Cell(i, j));
                 }
             }
         }
@@ -54,94 +62,72 @@ export default class Board {
         // Rule 2: Any dead cell with three live neighbours becomes a live cell.
         // Rule 3: All other live cells die in the next generation. Similarly, all other dead cells stay dead.
 
-        const deadCellsWithLivingNeighbors = this._livingCells.reduce(
-            (accumulator, current) => {
-                return [
-                    ...accumulator,
-                    ...this.getDeadNeighborsAt(current.coordinates),
-                ];
-            },
-            new Array<Cell>()
-        );
+        const newCellMap = new Map<string, Cell>();
 
-        // create hashmap of the dead cells so we can filter out copies
-        const deadCellsHashmap = new Map();
+        // we kill two birds with one stone here: we check each living cell to see if it dies, and we also
+        // get the dead neighbors of each living cell and check to see if they come alive
 
-        // check dead cells to see if any come alive
-        const newLivingCells = deadCellsWithLivingNeighbors.filter((cell) => {
-            let alreadyAdded = false;
-            if (
-                deadCellsHashmap.has(
-                    [cell.coordinates.x, cell.coordinates.y].toString()
-                )
-            ) {
-                alreadyAdded = true;
-            } else {
-                deadCellsHashmap.set(
-                    [cell.coordinates.x, cell.coordinates.y].toString(),
-                    1
+        this._cellMap.forEach((livingCell) => {
+            const livingNeighbors = this.countLivingNeighborsAt(
+                livingCell.coordinates
+            );
+
+            if (livingNeighbors === 2 || livingNeighbors === 3) {
+                newCellMap.set(
+                    `${livingCell.coordinates.x},${livingCell.coordinates.y}`,
+                    livingCell
                 );
             }
-
-            return (
-                this.countLivingNeighborsAt(cell.coordinates) === 3 &&
-                !alreadyAdded
+            const deadNeighbors = this.getDeadNeighborsAt(
+                livingCell.coordinates
             );
+
+            deadNeighbors.forEach((n) => {
+                if (
+                    this.countLivingNeighborsAt(n.coordinates) === 3 &&
+                    !newCellMap.has(`${n.coordinates.x},${n.coordinates.y}`)
+                ) {
+                    newCellMap.set(`${n.coordinates.x},${n.coordinates.y}`, n);
+                }
+            });
         });
 
-        // check living cells to see if any die
-        this._livingCells = this._livingCells.filter((cell) => {
-            const numberOfLivingNeighbors = this.countLivingNeighborsAt(
-                cell.coordinates
-            );
-            return (
-                numberOfLivingNeighbors === 2 || numberOfLivingNeighbors === 3
-            );
-        });
-
-        this._livingCells.push(...newLivingCells);
+        this._cellMap = newCellMap;
     }
 
     getLivingNeighborsAt({ x, y }: { x: number; y: number }) {
-        const livingNeighbors = new Array<Cell>();
+        const neighbors = [
+            this._cellMap.get([x - 1, y].toString()),
+            this._cellMap.get([x + 1, y].toString()),
+            this._cellMap.get([x, y - 1].toString()),
+            this._cellMap.get([x, y + 1].toString()),
+            this._cellMap.get([x - 1, y - 1].toString()),
+            this._cellMap.get([x - 1, y + 1].toString()),
+            this._cellMap.get([x + 1, y - 1].toString()),
+            this._cellMap.get([x + 1, y + 1].toString()),
+        ];
 
-        this._livingCells.forEach((cell) => {
-            if (cell.coordinates.x === x && cell.coordinates.y === y) return;
-            if (
-                cell.coordinates.x >= x - 1 &&
-                cell.coordinates.x <= x + 1 &&
-                cell.coordinates.y >= y - 1 &&
-                cell.coordinates.y <= y + 1
-            ) {
-                livingNeighbors.push(cell);
-            }
-        });
-
-        return livingNeighbors;
+        return neighbors.filter((n) => !!n);
     }
 
     getDeadNeighborsAt({ x, y }: { x: number; y: number }) {
-        const livingNeighbors = this.getLivingNeighborsAt({ x, y });
-
-        const coordsMap = new Map();
-
-        // create a hashmap that has the coordinates of each living cell as keys (in string form)
-        livingNeighbors.forEach((cell, i) => {
-            const coords = [cell.coordinates.x, cell.coordinates.y].toString();
-            coordsMap.set(coords, i);
-        });
+        const neighborCoords = [
+            [x - 1, y],
+            [x + 1, y],
+            [x, y - 1],
+            [x, y + 1],
+            [x - 1, y - 1],
+            [x - 1, y + 1],
+            [x + 1, y - 1],
+            [x + 1, y + 1],
+        ];
 
         const deadNeighbors = new Array<Cell>();
 
-        for (let i = x - 1; i <= x + 1; i++) {
-            for (let j = y - 1; j <= y + 1; j++) {
-                if (i === x && j === y) continue;
-                // check the combination of i and j to see if it's in the hashmap
-                if (!coordsMap.has([i, j].toString())) {
-                    deadNeighbors.push(new Cell(i, j));
-                }
-            }
-        }
+        neighborCoords.forEach((coord) => {
+            if (!this._cellMap.has(coord.toString()))
+                deadNeighbors.push(new Cell(coord[0], coord[1]));
+        });
 
         return deadNeighbors;
     }
