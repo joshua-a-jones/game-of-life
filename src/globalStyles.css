@@ -1,4 +1,7 @@
 body {
     height: 500px;
     background-color: pink;
+    display: flex;
+   
+    justify-content: center;
 }
