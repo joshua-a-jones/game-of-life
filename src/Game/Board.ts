@@ -3,19 +3,12 @@ import Cell from './Cell';
 export default class Board {
     private _xDim: number;
     private _yDim: number;
-    private _cellMap: Map<string, Cell>;
+    private _boardState: Map<string, Cell>;
 
-    // _cells: Map();
-
-    // the key of each cell is its coordinates (allows constant lookup time for any cell)
-    // the value of each cell is 1 or 0 (alive or dead)
-    // this will greatly speed up counting the living neighbors because we don't have to loop anymore
-
-    // constructor for square board
     public constructor(xInitial: number, yInitial: number) {
         this._xDim = xInitial;
         this._yDim = yInitial;
-        this._cellMap = new Map<string, Cell>();
+        this._boardState = new Map<string, Cell>();
 
         // randomizes the starting status of each cell.
         // for (let i = 0; i < xInitial; i++) {
@@ -28,26 +21,32 @@ export default class Board {
         //     }
         // }
 
-        this._cellMap.set('1,2', new Cell(1, 2));
-        this._cellMap.set('2,2', new Cell(2, 2));
-        this._cellMap.set('3,2', new Cell(3, 2));
-        this._cellMap.set('3,1', new Cell(3, 1));
-        this._cellMap.set('2,0', new Cell(2, 0));
+        this.addCellAt(1, 2);
+        this.addCellAt(2, 2);
+        this.addCellAt(3, 2);
+        this.addCellAt(3, 1);
+        this.addCellAt(2, 0);
+    }
+
+    addCellAt(x: number, y: number) {
+        if (!this._boardState.has([x, y].toString())) {
+            this._boardState.set([x, y].toString(), new Cell(x, y));
+        }
     }
 
     getBoardState() {
         //return this._livingCells;
         // return an array of the values of cellMap
-        return Array.from(this._cellMap.values());
+        return Array.from(this._boardState.values());
     }
 
     randomizeBoardState() {
-        this._cellMap = new Map<string, Cell>();
+        this._boardState = new Map<string, Cell>();
         for (let i = 0; i < this._xDim; i++) {
             for (let j = 0; j < this._yDim; j++) {
-                const rand = Math.floor(Math.random() * 2);
-                if (rand > 0) {
-                    this._cellMap.set(`${i},${j}`, new Cell(i, j));
+                const rand = Math.floor(Math.random() * 100);
+                if (rand > 70) {
+                    this.addCellAt(i, j);
                 }
             }
         }
@@ -58,7 +57,7 @@ export default class Board {
     }
 
     updateBoardState() {
-        // Rule 1: Any live cell with two or three live neighbours survives.
+        // Rule 1: Any live cell with two or three live neighbors survives.
         // Rule 2: Any dead cell with three live neighbours becomes a live cell.
         // Rule 3: All other live cells die in the next generation. Similarly, all other dead cells stay dead.
 
@@ -67,17 +66,19 @@ export default class Board {
         // we kill two birds with one stone here: we check each living cell to see if it dies, and we also
         // get the dead neighbors of each living cell and check to see if they come alive
 
-        this._cellMap.forEach((livingCell) => {
+        this._boardState.forEach((livingCell) => {
+            // find the living neighbors of the current cell and apply rule 1 above
             const livingNeighbors = this.countLivingNeighborsAt(
                 livingCell.coordinates
             );
-
             if (livingNeighbors === 2 || livingNeighbors === 3) {
                 newCellMap.set(
                     `${livingCell.coordinates.x},${livingCell.coordinates.y}`,
                     livingCell
                 );
             }
+
+            // now get the dead neighbors of the current cell and see if they come to life according to rule 2
             const deadNeighbors = this.getDeadNeighborsAt(
                 livingCell.coordinates
             );
@@ -92,21 +93,24 @@ export default class Board {
             });
         });
 
-        this._cellMap = newCellMap;
+        // update the game's state
+        this._boardState = newCellMap;
     }
 
     getLivingNeighborsAt({ x, y }: { x: number; y: number }) {
+        // each element in this array will be either a living neighbor or undefined
         const neighbors = [
-            this._cellMap.get([x - 1, y].toString()),
-            this._cellMap.get([x + 1, y].toString()),
-            this._cellMap.get([x, y - 1].toString()),
-            this._cellMap.get([x, y + 1].toString()),
-            this._cellMap.get([x - 1, y - 1].toString()),
-            this._cellMap.get([x - 1, y + 1].toString()),
-            this._cellMap.get([x + 1, y - 1].toString()),
-            this._cellMap.get([x + 1, y + 1].toString()),
+            this._boardState.get([x - 1, y].toString()),
+            this._boardState.get([x + 1, y].toString()),
+            this._boardState.get([x, y - 1].toString()),
+            this._boardState.get([x, y + 1].toString()),
+            this._boardState.get([x - 1, y - 1].toString()),
+            this._boardState.get([x - 1, y + 1].toString()),
+            this._boardState.get([x + 1, y - 1].toString()),
+            this._boardState.get([x + 1, y + 1].toString()),
         ];
 
+        // return the array with the undefineds filtered out
         return neighbors.filter((n) => !!n);
     }
 
@@ -124,8 +128,11 @@ export default class Board {
 
         const deadNeighbors = new Array<Cell>();
 
+        // loop through all the neighboring coordinates and check to see if there's a living cell
+        // if there's no living cell, we create a new cell at those coordinates and add it to
+        // the deadNeighbors array, which is then returned.
         neighborCoords.forEach((coord) => {
-            if (!this._cellMap.has(coord.toString()))
+            if (!this._boardState.has(coord.toString()))
                 deadNeighbors.push(new Cell(coord[0], coord[1]));
         });
 
