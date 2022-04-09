@@ -35,7 +35,6 @@ export default class Board {
     }
 
     getBoardState() {
-        //return this._livingCells;
         // return an array of the values of cellMap
         return Array.from(this._boardState.values());
     }
