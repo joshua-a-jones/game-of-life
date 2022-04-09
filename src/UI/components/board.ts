@@ -3,12 +3,10 @@ import Board from 'src/Game/Board';
 
 interface BoardContainerProps {
     Board: Board;
-
 }
 
 function BoardContainer(props: BoardContainerProps) {
-    let { Board } =
-        props;
+    const { Board } = props;
 
     let initialX = 0;
     let initialY = 0;
@@ -17,7 +15,7 @@ function BoardContainer(props: BoardContainerProps) {
 
     const boardContainer = document.createElement('div');
     boardContainer.setAttribute('id', 'boardContainer');
-    boardContainer.classList.add(style.board);  
+    boardContainer.classList.add(style.board);
 
     const canvas = document.createElement('canvas');
     canvas.setAttribute('id', 'canvas');
@@ -40,41 +38,46 @@ function BoardContainer(props: BoardContainerProps) {
     document.addEventListener('mouseup', (e) => {
         e.preventDefault;
         canvas.style.cursor = 'default';
-      
+
         document.removeEventListener('mousemove', handleCoordinatesForRender);
     });
 
     function handleCoordinatesForRender(e: MouseEvent) {
-
-        let canvasboundingrect = canvas.getBoundingClientRect();
+        const canvasboundingrect = canvas.getBoundingClientRect();
         offsetX = e.clientX - canvasboundingrect.left - initialX;
         offsetY = e.clientY - canvasboundingrect.top - initialY;
-    
+
         handleCanvasTransform(offsetX, offsetY);
-    
     }
 
     function handleCanvasTransform(offsetX = 0, offsetY = 0) {
         if (ctx) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            handleRenderCanvas(50,offsetX,offsetY);
+            handleRenderCanvas(50, offsetX, offsetY);
         }
-        
     }
 
-    function handleRenderCanvas(cellSize: number, offsetX: number, offsetY: number) {
-
+    function handleRenderCanvas(
+        cellSize: number,
+        offsetX: number,
+        offsetY: number
+    ) {
         if (ctx) {
             for (let i = 0; i < canvas.width / cellSize; i++) {
                 for (let j = 0; j < canvas.height / cellSize; j++) {
-                    ctx.strokeRect(i * cellSize + offsetX, j * cellSize + offsetY, cellSize, cellSize);
+                    ctx.strokeRect(
+                        i * cellSize + offsetX,
+                        j * cellSize + offsetY,
+                        cellSize,
+                        cellSize
+                    );
                 }
             }
             Board.getBoardState().forEach((cell) => {
                 ctx.fillStyle = '#f000f0';
                 ctx.fillRect(
-                    offsetX + cell.coordinates.x*cellSize,
-                    offsetY + cell.coordinates.y*cellSize,
+                    offsetX + cell.coordinates.x * cellSize,
+                    offsetY + cell.coordinates.y * cellSize,
                     cellSize,
                     cellSize
                 );
@@ -82,15 +85,9 @@ function BoardContainer(props: BoardContainerProps) {
         }
     }
 
-    return { boardContainer, handleRenderCanvas}
+    return { boardContainer, handleRenderCanvas };
 }
 
-
-
-
-
 // function that accepts a Board object and renders the grid to the canvas
-
-
 
 export { BoardContainer };
