@@ -34,6 +34,12 @@ export default class Board {
         }
     }
 
+    removeCellAt(x: number, y: number) {
+        if (this._boardState.has([x, y].toString())) {
+            this._boardState.delete([x, y].toString());
+        }
+    }
+
     getBoardState() {
         // return an array of the values of cellMap
         return Array.from(this._boardState.values());
