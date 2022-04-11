@@ -104,8 +104,16 @@ function BoardContainer(props: BoardContainerProps) {
 
     function handleClearCanvas(offsetX: number, offsetY: number) {
         if (ctx) {
-            for (let i = 0; i < canvas.width / cellSize; i++) {
-                for (let j = 0; j < canvas.height / cellSize; j++) {
+            for (
+                let i = 0 - Math.floor(offsetX / cellSize);
+                i < Math.floor((canvas.width - offsetX) / cellSize);
+                i++
+            ) {
+                for (
+                    let j = 0 - Math.floor(offsetY / cellSize);
+                    j < Math.floor((canvas.height - offsetY) / cellSize);
+                    j++
+                ) {
                     ctx.clearRect(
                         i * cellSize + offsetX,
                         j * cellSize + offsetY,
