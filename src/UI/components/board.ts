@@ -1,5 +1,6 @@
 import style from './board.module.css';
 import Board from 'src/Game/Board';
+import { match } from 'assert';
 
 interface BoardContainerProps {
     Board: Board;
@@ -71,8 +72,16 @@ function BoardContainer(props: BoardContainerProps) {
 
     function handleRenderCanvas(offsetX: number, offsetY: number) {
         if (ctx) {
-            for (let i = 0 / cellSize; i < canvas.width / cellSize; i++) {
-                for (let j = 0 / cellSize; j < canvas.height / cellSize; j++) {
+            for (
+                let i = 0 - Math.floor(offsetX / cellSize);
+                i < Math.floor((canvas.width - offsetX) / cellSize);
+                i++
+            ) {
+                for (
+                    let j = 0 - Math.floor(offsetY / cellSize);
+                    j < Math.floor((canvas.height - offsetY) / cellSize);
+                    j++
+                ) {
                     ctx.strokeRect(
                         i * cellSize + offsetX,
                         j * cellSize + offsetY,
