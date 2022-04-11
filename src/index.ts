@@ -39,9 +39,12 @@ const renderApp = () => {
             })
         );
 
-        const newBoardContainer = BoardContainer({ Board: board });
+        const newBoardContainer = BoardContainer({
+            Board: board,
+            cellSize: 50,
+        });
         app.appendChild(newBoardContainer.boardContainer);
-        newBoardContainer.handleRenderCanvas(50, 0, 0);
+        newBoardContainer.handleRenderCanvas(0, 0);
     } else {
         throw new Error('App element could not be found in index.html');
     }
