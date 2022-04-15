@@ -1,6 +1,5 @@
 import style from './board.module.css';
-import Board from 'src/Game/Board';
-import { match } from 'assert';
+import { Board } from 'src/Game/Board';
 
 interface BoardContainerProps {
     Board: Board;
