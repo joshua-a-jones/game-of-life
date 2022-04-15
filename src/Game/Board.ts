@@ -1,6 +1,6 @@
-import Cell from './Cell';
+import { Cell } from './Cell';
 
-export default class Board {
+class Board {
     private _xDim: number;
     private _yDim: number;
     private _boardState: Map<string, Cell>;
@@ -144,3 +144,5 @@ export default class Board {
         return deadNeighbors;
     }
 }
+
+export { Board };

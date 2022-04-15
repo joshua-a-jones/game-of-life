@@ -1,4 +1,4 @@
-export default class Cell {
+class Cell {
     private _coordinates: { x: number; y: number };
 
     public constructor(x: number, y: number) {
@@ -9,3 +9,5 @@ export default class Cell {
         return this._coordinates;
     }
 }
+
+export { Cell };
