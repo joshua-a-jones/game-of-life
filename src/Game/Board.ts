@@ -10,17 +10,6 @@ class Board {
         this._yDim = yInitial;
         this._boardState = new Map<string, Cell>();
 
-        // randomizes the starting status of each cell.
-        // for (let i = 0; i < xInitial; i++) {
-        //     for (let j = 0; j < yInitial; j++) {
-        //         const rand = Math.floor(Math.random() * 2);
-        //         if (rand > 0) {
-        //             const newCell = new Cell(i, j);
-        //             this._livingCells.push(newCell);
-        //         }
-        //     }
-        // }
-
         this.addCellAt(1, 2);
         this.addCellAt(2, 2);
         this.addCellAt(3, 2);
@@ -43,18 +32,6 @@ class Board {
     getBoardState() {
         // return an array of the values of cellMap
         return Array.from(this._boardState.values());
-    }
-
-    randomizeBoardState() {
-        this._boardState = new Map<string, Cell>();
-        for (let i = 0; i < this._xDim; i++) {
-            for (let j = 0; j < this._yDim; j++) {
-                const rand = Math.floor(Math.random() * 100);
-                if (rand > 70) {
-                    this.addCellAt(i, j);
-                }
-            }
-        }
     }
 
     countLivingNeighborsAt({ x, y }: { x: number; y: number }) {
