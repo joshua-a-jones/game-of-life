@@ -21,11 +21,11 @@ class Board {
         //     }
         // }
 
-        this.addCellAt(1, 2);
-        this.addCellAt(2, 2);
-        this.addCellAt(3, 2);
-        this.addCellAt(3, 1);
-        this.addCellAt(2, 0);
+        this.addCellAt(9, 10);
+        this.addCellAt(10, 10);
+        this.addCellAt(11, 10);
+        this.addCellAt(11, 9);
+        this.addCellAt(10, 8);
     }
 
     addCellAt(x: number, y: number) {

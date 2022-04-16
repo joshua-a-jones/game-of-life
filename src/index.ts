@@ -1,28 +1,37 @@
 import { BoardContainer } from './UI/components/board';
 import { ControlsContainer } from './UI/components/controls';
+import { GameController } from './Game/GameController';
 import './globalStyles.css';
-import Board from './Game/Board';
+import { Board } from './Game/Board';
 let isRunning = false;
 
-//test
-const board = new Board(20, 20);
+const board = new Board(10, 10);
+renderApp(board);
 
-const initialY = 0;
-const initialX = 0;
-const offsetX = 0;
-const offsetY = 0;
+const gameController = new GameController({
+    rerenderBoard,
+    maxIterations: 20,
+    board,
+});
 
-function handleButtonClickRun() {
+function handleStopButtonClick() {
     isRunning = !isRunning;
-    renderApp();
+    gameController.stopGame();
+    renderApp(board);
+}
+
+function handleRunButtonClickRun() {
+    isRunning = !isRunning;
+    renderApp;
+    gameController.runGame();
 }
 
 function handleButtonClickRandomize() {
     board.randomizeBoardState();
-    renderApp();
+    renderApp(board);
 }
 
-const renderApp = () => {
+function renderApp(board: Board) {
     const app = document.getElementById('app');
 
     if (app !== null) {
@@ -32,22 +41,38 @@ const renderApp = () => {
 
         app.appendChild(
             ControlsContainer({
-                handleRunClick: handleButtonClickRun,
+                handleRunClick: handleRunButtonClickRun,
                 handleRandomizeClick: handleButtonClickRandomize,
-                handleStopClick: handleButtonClickRun,
+                handleStopClick: handleStopButtonClick,
                 isRunning,
             })
         );
-
-        const newBoardContainer = BoardContainer({
-            Board: board,
-            cellSize: 50,
-        });
-        app.appendChild(newBoardContainer.boardContainer);
-        newBoardContainer.handleRenderCanvas(0, 0);
+        rerenderBoard(board);
     } else {
         throw new Error('App element could not be found in index.html');
     }
-};
+}
 
-renderApp();
+function rerenderBoard(board: Board) {
+    const app = document.getElementById('app');
+    const currentBoardElement = document.getElementById('boardContainer');
+
+    if (app !== null) {
+        if (currentBoardElement) {
+            app.removeChild(currentBoardElement);
+            const newBoardContainer = BoardContainer({
+                Board: board,
+                cellSize: 10,
+            });
+            app.appendChild(newBoardContainer.boardContainer);
+            newBoardContainer.handleRenderCanvas(0, 0);
+        } else {
+            const newBoardContainer = BoardContainer({
+                Board: board,
+                cellSize: 10,
+            });
+            app.appendChild(newBoardContainer.boardContainer);
+            newBoardContainer.handleRenderCanvas(0, 0);
+        }
+    }
+}
