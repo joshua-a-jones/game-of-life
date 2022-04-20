@@ -5,8 +5,10 @@ import './globalStyles.css';
 import { Board } from './Game/Board';
 let isRunning = false;
 
+
 const board = new Board(10, 10);
-renderApp(board);
+const boardRenderer = BoardContainer({Board: board, cellSize: 50});
+initializeApp();
 
 const gameController = new GameController({
     rerenderBoard,
@@ -17,12 +19,12 @@ const gameController = new GameController({
 function handleStopButtonClick() {
     isRunning = !isRunning;
     gameController.stopGame();
-    renderApp(board);
+    initializeApp();
 }
 
 function handleRunButtonClickRun() {
     isRunning = !isRunning;
-    renderApp;
+    initializeApp;
     gameController.runGame();
 }
 
@@ -31,7 +33,7 @@ function handleRunButtonClickRun() {
 //     renderApp(board);
 // }
 
-function renderApp(board: Board) {
+function initializeApp() {
     const app = document.getElementById('app');
 
     if (app !== null) {
@@ -47,7 +49,11 @@ function renderApp(board: Board) {
                 isRunning,
             })
         );
-        rerenderBoard(board);
+        
+        const boardCanvas = boardRenderer.boardContainer;
+        boardRenderer.handleRenderCanvas(0, 0);
+        app.appendChild(boardCanvas);
+        
     } else {
         throw new Error('App element could not be found in index.html');
     }
@@ -59,20 +65,11 @@ function rerenderBoard(board: Board) {
 
     if (app !== null) {
         if (currentBoardElement) {
-            app.removeChild(currentBoardElement);
-            const newBoardContainer = BoardContainer({
-                Board: board,
-                cellSize: 10,
-            });
-            app.appendChild(newBoardContainer.boardContainer);
-            newBoardContainer.handleRenderCanvas(0, 0);
+            const offsets = boardRenderer.getOffsets();
+            boardRenderer.handleClearCanvas(offsets.offsetX, offsets.offsetY);
+            boardRenderer.handleRenderCanvas(offsets.offsetX, offsets.offsetY);
         } else {
-            const newBoardContainer = BoardContainer({
-                Board: board,
-                cellSize: 10,
-            });
-            app.appendChild(newBoardContainer.boardContainer);
-            newBoardContainer.handleRenderCanvas(0, 0);
+            console.log("poop");
         }
     }
 }

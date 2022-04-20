@@ -16,53 +16,42 @@ function BoardContainer(props: BoardContainerProps) {
     let mouseXIndex = false;
     let mouseYIndex = false;
 
-    function generateCanvasElement(
-        canvas_height: number,
-        canvas_width: number
-    ): HTMLCanvasElement {
-        const canvas = document.createElement('canvas');
-        canvas.setAttribute('id', 'canvas');
-        canvas.width = canvas_height;
-        canvas.height = canvas_width;
-        canvas.classList.add(style.canvas);
-        createCanvasEventListeners(canvas);
-        return canvas;
-    }
+    const boardContainer = document.createElement('div');
+    boardContainer.setAttribute('id', 'boardContainer');
+    boardContainer.classList.add(style.board);
 
-    function createCanvasEventListeners(canvas: HTMLCanvasElement) {
-        //when user triggers mouse down we should start watching for mouse move
-        canvas.addEventListener('mousedown', (e) => {
-            e.preventDefault;
+    const canvas = document.createElement('canvas');
+    canvas.setAttribute('id', 'canvas');
+    canvas.width = 1000;
+    canvas.height = 1000;
+    const ctx = canvas.getContext('2d');
+    canvas.classList.add(style.canvas);
 
-            initialX =
-                e.clientX - canvas.getBoundingClientRect().left - offsetX;
-            initialY = e.clientY - canvas.getBoundingClientRect().top - offsetY;
-            document.addEventListener('mousemove', handleCoordinatesForRender);
-        });
+    boardContainer.appendChild(canvas);
 
-        // when user lifts mouse we should stop watching for mouse move
-        document.addEventListener('mouseup', (e) => {
-            e.preventDefault;
-            canvas.style.cursor = 'default';
+    canvas.addEventListener('mousedown', (e) => {
+        e.preventDefault;
 
-            document.removeEventListener(
-                'mousemove',
-                handleCoordinatesForRender
-            );
+        initialX = e.clientX - canvas.getBoundingClientRect().left - offsetX;
+        initialY = e.clientY - canvas.getBoundingClientRect().top - offsetY;
+        document.addEventListener('mousemove', handleCoordinatesForRender);
+    });
 
-            if (!mouseXIndex || !mouseYIndex) {
-                handleCellClick(e);
-            }
+    document.addEventListener('mouseup', (e) => {
+        e.preventDefault;
+        canvas.style.cursor = 'default';
 
-            mouseXIndex = false;
-            mouseYIndex = false;
-        });
-    }
+        document.removeEventListener('mousemove', handleCoordinatesForRender);
 
-    function handleCoordinatesForRender(
-        e: MouseEvent,
-        canvas: HTMLCanvasElement
-    ) {
+        if (!mouseXIndex || !mouseYIndex) {
+            handleCellClick(e);
+        }
+
+        mouseXIndex = false;
+        mouseYIndex = false;
+    });
+
+    function handleCoordinatesForRender(e: MouseEvent) {
         const canvasboundingrect = canvas.getBoundingClientRect();
         offsetX = e.clientX - canvasboundingrect.left - initialX;
         offsetY = e.clientY - canvasboundingrect.top - initialY;
@@ -164,7 +153,11 @@ function BoardContainer(props: BoardContainerProps) {
         handleRenderCanvas(offsetX, offsetY);
     }
 
-    return { generateCanvasElement, handleRenderCanvas };
+    function getOffsets() {
+        return { offsetX, offsetY };
+    }
+
+    return { boardContainer, handleRenderCanvas, getOffsets, handleClearCanvas };
 }
 
 // function that accepts a Board object and renders the grid to the canvas
