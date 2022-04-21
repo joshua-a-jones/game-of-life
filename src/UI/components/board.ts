@@ -153,7 +153,11 @@ function BoardContainer(props: BoardContainerProps) {
         handleRenderCanvas(offsetX, offsetY);
     }
 
-    return { boardContainer, handleRenderCanvas };
+    function getOffsets() {
+        return { offsetX, offsetY };
+    }
+
+    return { boardContainer, handleRenderCanvas, getOffsets, handleClearCanvas };
 }
 
 // function that accepts a Board object and renders the grid to the canvas

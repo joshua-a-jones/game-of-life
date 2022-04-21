@@ -10,11 +10,22 @@ class Board {
         this._yDim = yInitial;
         this._boardState = new Map<string, Cell>();
 
-        this.addCellAt(1, 2);
-        this.addCellAt(2, 2);
-        this.addCellAt(3, 2);
-        this.addCellAt(3, 1);
-        this.addCellAt(2, 0);
+        // randomizes the starting status of each cell.
+        // for (let i = 0; i < xInitial; i++) {
+        //     for (let j = 0; j < yInitial; j++) {
+        //         const rand = Math.floor(Math.random() * 2);
+        //         if (rand > 0) {
+        //             const newCell = new Cell(i, j);
+        //             this._livingCells.push(newCell);
+        //         }
+        //     }
+        // }
+
+        this.addCellAt(9, 10);
+        this.addCellAt(10, 10);
+        this.addCellAt(11, 10);
+        this.addCellAt(11, 9);
+        this.addCellAt(10, 8);
     }
 
     addCellAt(x: number, y: number) {
