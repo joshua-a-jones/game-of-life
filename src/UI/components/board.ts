@@ -15,6 +15,8 @@ function BoardContainer(props: BoardContainerProps) {
     let offsetY = 0;
     let mouseXIndex = false;
     let mouseYIndex = false;
+    let mouseTimeout: number;
+    let mouseStatus = 'up';
 
     const boardContainer = document.createElement('div');
     boardContainer.setAttribute('id', 'boardContainer');
@@ -31,13 +33,19 @@ function BoardContainer(props: BoardContainerProps) {
 
     canvas.addEventListener('mousedown', (e) => {
         e.preventDefault;
-
+        clearTimeout(mouseTimeout);
+        mouseStatus = 'down';
         initialX = e.clientX - canvas.getBoundingClientRect().left - offsetX;
         initialY = e.clientY - canvas.getBoundingClientRect().top - offsetY;
-        document.addEventListener('mousemove', handleCoordinatesForRender);
+        mouseTimeout = window.setTimeout(function () {
+            mouseStatus = 'longDown';
+            document.addEventListener('mousemove', handleCoordinatesForRender);
+        }, 100);
     });
 
     document.addEventListener('mouseup', (e) => {
+        clearTimeout(mouseTimeout);
+        mouseStatus = 'up';
         e.preventDefault;
         canvas.style.cursor = 'default';
 
@@ -55,6 +63,7 @@ function BoardContainer(props: BoardContainerProps) {
         const canvasboundingrect = canvas.getBoundingClientRect();
         offsetX = e.clientX - canvasboundingrect.left - initialX;
         offsetY = e.clientY - canvasboundingrect.top - initialY;
+
         canvas.style.cursor = 'grabbing';
         handleCanvasTransform(offsetX, offsetY);
 
@@ -157,7 +166,12 @@ function BoardContainer(props: BoardContainerProps) {
         return { offsetX, offsetY };
     }
 
-    return { boardContainer, handleRenderCanvas, getOffsets, handleClearCanvas };
+    return {
+        boardContainer,
+        handleRenderCanvas,
+        getOffsets,
+        handleClearCanvas,
+    };
 }
 
 // function that accepts a Board object and renders the grid to the canvas
