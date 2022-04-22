@@ -8,7 +8,7 @@ In the project directory run the following:
 to install all project dependencies.
 
 ### `npm start`
-This will automatically build the project and start it with live-server at [http://localhost:8080](http://localhost:8080)
+This will automatically build the project in development mode and start it with live-server at [http://localhost:8080](http://localhost:8080)
 
 ### `npm run build`
 This will build the project for production in the `dist` folder.
