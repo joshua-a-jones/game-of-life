@@ -5,14 +5,13 @@ import './globalStyles.css';
 import { Board } from './Game/Board';
 let isRunning = false;
 
-
 const board = new Board(10, 10);
-const boardRenderer = BoardContainer({Board: board, cellSize: 50});
+const boardRenderer = BoardContainer({ Board: board });
 initializeApp();
 
 const gameController = new GameController({
     rerenderBoard,
-    maxIterations: 20,
+    maxIterations: 200,
     board,
 });
 
@@ -49,11 +48,10 @@ function initializeApp() {
                 isRunning,
             })
         );
-        
+
         const boardCanvas = boardRenderer.boardContainer;
         boardRenderer.handleRenderCanvas(0, 0);
         app.appendChild(boardCanvas);
-        
     } else {
         throw new Error('App element could not be found in index.html');
     }
@@ -69,7 +67,7 @@ function rerenderBoard(board: Board) {
             boardRenderer.handleClearCanvas(offsets.offsetX, offsets.offsetY);
             boardRenderer.handleRenderCanvas(offsets.offsetX, offsets.offsetY);
         } else {
-            console.log("poop");
+            console.log('poop');
         }
     }
 }
