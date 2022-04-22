@@ -3,11 +3,10 @@ import { Board } from 'src/Game/Board';
 
 interface BoardContainerProps {
     Board: Board;
-    cellSize: number;
 }
 
 function BoardContainer(props: BoardContainerProps) {
-    const { Board, cellSize } = props;
+    const { Board } = props;
 
     let initialX = 0;
     let initialY = 0;
@@ -17,6 +16,7 @@ function BoardContainer(props: BoardContainerProps) {
     let mouseYIndex = false;
     let mouseTimeout: number;
     let mouseStatus = 'up';
+    let cellSize = 50;
 
     const boardContainer = document.createElement('div');
     boardContainer.setAttribute('id', 'boardContainer');
@@ -40,7 +40,7 @@ function BoardContainer(props: BoardContainerProps) {
         mouseTimeout = window.setTimeout(function () {
             mouseStatus = 'longDown';
             document.addEventListener('mousemove', handleCoordinatesForRender);
-        }, 100);
+        }, 75);
     });
 
     document.addEventListener('mouseup', (e) => {
@@ -57,6 +57,17 @@ function BoardContainer(props: BoardContainerProps) {
 
         mouseXIndex = false;
         mouseYIndex = false;
+    });
+
+    document.addEventListener('wheel', (e) => {
+        const pointerX = e.clientX - canvas.getBoundingClientRect().left;
+        const pointerY = e.clientY - canvas.getBoundingClientRect().top;
+        const delta = e.deltaY;
+        if (delta > 0) {
+            zoomOut(pointerX, pointerY);
+        } else {
+            zoomIn(pointerX, pointerY);
+        }
     });
 
     function handleCoordinatesForRender(e: MouseEvent) {
@@ -164,6 +175,34 @@ function BoardContainer(props: BoardContainerProps) {
 
     function getOffsets() {
         return { offsetX, offsetY };
+    }
+
+    function zoomOut(pointerX: number, pointerY: number) {
+        if (cellSize > 20) {
+            const pointerTranslateX = 0.8 * pointerX - pointerX;
+            const pointerTranslateY = 0.8 * pointerY - pointerY;
+            const newCellSize = cellSize * 0.8;
+            const newOffsetX = offsetX * 0.8 - pointerTranslateX;
+            const newOffsetY = offsetY * 0.8 - pointerTranslateY;
+            cellSize = newCellSize;
+            offsetX = newOffsetX;
+            offsetY = newOffsetY;
+            handleCanvasTransform(offsetX, offsetY);
+        }
+    }
+
+    function zoomIn(pointerX: number, pointerY: number) {
+        if (cellSize < 100) {
+            const pointerTranslateX = 1.2 * pointerX - pointerX;
+            const pointerTranslateY = 1.2 * pointerY - pointerY;
+            const newCellSize = cellSize * 1.2;
+            const newOffsetX = offsetX * 1.2 - pointerTranslateX;
+            const newOffsetY = offsetY * 1.2 - pointerTranslateY;
+            cellSize = newCellSize;
+            offsetX = newOffsetX;
+            offsetY = newOffsetY;
+            handleCanvasTransform(offsetX, offsetY);
+        }
     }
 
     return {
