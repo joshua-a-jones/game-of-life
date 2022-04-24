@@ -26,6 +26,9 @@ function onGenerationsInputChange(value: number) {
     gameController.setMaxGenerations = value;
 }
 
+
+
+
 // function handleButtonClickRandomize() {
 //     board.randomizeBoardState();
 //     renderApp(board);
@@ -47,6 +50,14 @@ function initializeApp() {
                 onGenerationsInputChange,
             })
         );
+
+        const reset = document.createElement('button');
+        reset.innerText = 'Reset';
+        reset.addEventListener('click', () => {
+        
+            boardRenderer.resetBoard();
+        });
+        app.appendChild(reset);
 
         const boardCanvas = boardRenderer.boardContainer;
         boardRenderer.handleRenderCanvas(0, 0);

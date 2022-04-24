@@ -205,11 +205,25 @@ function BoardContainer(props: BoardContainerProps) {
         }
     }
 
+    function resetBoard() {
+        initialX = 0;
+        initialY = 0;
+        offsetX = 0;
+        offsetY = 0;
+        mouseXIndex = false;
+        mouseYIndex = false;
+        mouseStatus = 'up';
+        cellSize = 50;
+
+        handleCanvasTransform();
+    }
+
     return {
         boardContainer,
         handleRenderCanvas,
         getOffsets,
         handleClearCanvas,
+        resetBoard,
     };
 }
 
