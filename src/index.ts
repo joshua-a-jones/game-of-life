@@ -3,7 +3,6 @@ import { ControlsContainer } from './UI/components/controls';
 import { GameController } from './Game/GameController';
 import './globalStyles.css';
 import { Board } from './Game/Board';
-let isRunning = false;
 
 const board = new Board(10, 10);
 const boardRenderer = BoardContainer({ Board: board });
@@ -16,15 +15,15 @@ const gameController = new GameController({
 });
 
 function handleStopButtonClick() {
-    isRunning = !isRunning;
     gameController.stopGame();
-    initializeApp();
 }
 
 function handleRunButtonClickRun() {
-    isRunning = !isRunning;
-    initializeApp;
     gameController.runGame();
+}
+
+function onGenerationsInputChange(value: number) {
+    gameController.setMaxGenerations = value;
 }
 
 // function handleButtonClickRandomize() {
@@ -45,7 +44,7 @@ function initializeApp() {
                 handleRunClick: handleRunButtonClickRun,
                 // handleRandomizeClick: handleButtonClickRandomize,
                 handleStopClick: handleStopButtonClick,
-                isRunning,
+                onGenerationsInputChange,
             })
         );
 

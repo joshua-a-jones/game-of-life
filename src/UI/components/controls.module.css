@@ -26,6 +26,16 @@
 .container {
     display: flex;
     justify-content: space-between;
-    max-width: 240px;
+    align-items: center;
+    max-width: 400px;
     margin: 0 auto;
+}
+
+.numberInput {
+    width: 70px;
+    border-radius: 4px;
+    padding: 0.5rem;
+    margin-bottom: 10px;
+    background-color: teal;
+    color: white;
 }

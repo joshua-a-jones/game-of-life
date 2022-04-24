@@ -1,4 +1,3 @@
-import { clear } from 'console';
 import { Board } from './Board';
 
 interface GameControllerProps {
@@ -9,7 +8,7 @@ interface GameControllerProps {
 
 class GameController {
     private _rerenderBoard: (board: Board) => void;
-    private readonly _maxIterations: number;
+    private _maxIterations: number;
     private _currentIteration = 0;
     private _board: Board;
     private _stopGame = false;
@@ -20,6 +19,10 @@ class GameController {
         this._board = props.board;
 
         //this._rerenderBoard(this._board);
+    }
+
+    public set setMaxGenerations(value: number) {
+        this._maxIterations = value;
     }
 
     public runGame() {
