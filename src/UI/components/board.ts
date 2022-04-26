@@ -48,10 +48,10 @@ function BoardContainer(props: BoardContainerProps) {
         mouseStatus = 'up';
         e.preventDefault;
         canvas.style.cursor = 'default';
-
+        
         document.removeEventListener('mousemove', handleCoordinatesForRender);
 
-        if (!mouseXIndex || !mouseYIndex) {
+        if ((!mouseXIndex || !mouseYIndex) && e.target === canvas) {
             handleCellClick(e);
         }
 
@@ -158,6 +158,7 @@ function BoardContainer(props: BoardContainerProps) {
 
     function handleCellClick(e: MouseEvent) {
         const cellcoordinates = handleConvertClickToCellCoordinates(e);
+        
         if (
             Board.getBoardState().find(
                 (cell) =>
