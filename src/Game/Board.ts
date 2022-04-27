@@ -21,11 +21,7 @@ class Board {
         //     }
         // }
 
-        this.addCellAt(9, 10);
-        this.addCellAt(10, 10);
-        this.addCellAt(11, 10);
-        this.addCellAt(11, 9);
-        this.addCellAt(10, 8);
+        this.makeGliderGun();
     }
 
     addCellAt(x: number, y: number) {
@@ -130,6 +126,48 @@ class Board {
         });
 
         return deadNeighbors;
+    }
+
+    private makeGliderGun() {
+        this.addCellAt(0, 8);
+        this.addCellAt(1, 8);
+        this.addCellAt(0, 9);
+        this.addCellAt(1, 9);
+
+        this.addCellAt(10, 8);
+        this.addCellAt(10, 9);
+        this.addCellAt(10, 10);
+        this.addCellAt(11, 7);
+        this.addCellAt(12, 6);
+        this.addCellAt(13, 6);
+        this.addCellAt(11, 11);
+        this.addCellAt(12, 12);
+        this.addCellAt(13, 12);
+        this.addCellAt(15, 11);
+        this.addCellAt(16, 10);
+        this.addCellAt(16, 9);
+        this.addCellAt(16, 8);
+        this.addCellAt(17, 9);
+        this.addCellAt(15, 7);
+        this.addCellAt(14, 9);
+
+        this.addCellAt(20, 8);
+        this.addCellAt(20, 7);
+        this.addCellAt(20, 6);
+        this.addCellAt(21, 8);
+        this.addCellAt(21, 7);
+        this.addCellAt(21, 6);
+        this.addCellAt(22, 5);
+        this.addCellAt(22, 9);
+        this.addCellAt(24, 4);
+        this.addCellAt(24, 5);
+        this.addCellAt(24, 9);
+        this.addCellAt(24, 10);
+
+        this.addCellAt(34, 6);
+        this.addCellAt(35, 6);
+        this.addCellAt(34, 7);
+        this.addCellAt(35, 7);
     }
 }
 
