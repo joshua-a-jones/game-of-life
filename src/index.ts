@@ -3,16 +3,22 @@ import { ControlsContainer } from './UI/components/controls';
 import { GameController } from './Game/GameController';
 import './globalStyles.css';
 import { Board } from './Game/Board';
+import {
+    IterationCounter,
+    updateIterationCount,
+} from './UI/components/iterationCounter';
 
 const board = new Board(10, 10);
 const boardRenderer = BoardContainer({ Board: board });
-initializeApp();
 
 const gameController = new GameController({
     rerenderBoard,
     maxIterations: 200,
     board,
+    retrieveCurrentIteration: updateIterationCount,
 });
+
+initializeApp();
 
 function handleStopButtonClick() {
     gameController.stopGame();
@@ -51,6 +57,8 @@ function initializeApp() {
         const boardCanvas = boardRenderer.boardContainer;
         boardRenderer.handleRenderCanvas(0, 0);
         app.appendChild(boardCanvas);
+
+        app.appendChild(IterationCounter(gameController.getMaxIterations));
     } else {
         throw new Error('App element could not be found in index.html');
     }
